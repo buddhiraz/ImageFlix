@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV File Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV File Contents</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Image Name</th>
+                <th>Box</th>
+                <th>Confidence</th>
+                <th>Embedding Vector</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in csv_data %}
+                <tr>
+                    {% for column in row %}
+                        <td>{{ column }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

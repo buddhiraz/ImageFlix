@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Gallery</title>
+    <style>
+        /* Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .header a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+        .gallery img {                                                              
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="{{ url_for('index') }}">Home</a>
+    </div>
+    <div class="container">
+        <h1>Image Gallery</h1>                                          
+        <img src="sigma_analytics_image_flix/EV001"/>
+        <div class="gallery">
+            {% for filename in image_files %}
+                <img src="{{ url_for('display_image', filename=filename) }}" alt="Image">
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

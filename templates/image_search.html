@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Search</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            background-color: #3498db;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="file"],
+        button {
+            margin-top: 20px;
+        }
+        #detectionResult {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Search</h1>
+        <input type="file" id="fileInput" accept="image/*">
+        <button onclick="processImage()">Search Image</button>
+
+        <div id="detectionResult"></div>
+    </div>
+
+    <script>
+        function processImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const URL = "http://localhost:5000/display_image/"
+            const getImageUrl = (image_name) => URL + image_name  
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/process_single_face', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(async (data) => {
+                // Display the detection result in the frontend
+                console.log(data)
+                const top_5_images = data['top 5 images']
+                const detectionResult = document.getElementById('detectionResult');
+                const wait = (time) => new Promise(res => setTimeout(res, time))
+                const imageUrls = top_5_images.map((image_array) => getImageUrl(image_array[0]))
+                console.log(imageUrls)
+
+                let imagesHTML = ''; // Variable to store the HTML for images
+
+                // Loop through the imageUrls array and create HTML for each image
+            imageUrls.forEach(url => {
+                    imagesHTML += `
+                        <img src="${url}" style="width: ; height: auto; display: block; margin-bottom: 10px;" alt="Image" title="Image">
+                        <div>123</div>
+                            `;
+                            });
+
+                detectionResult.innerHTML = `<h2 style="background-color: #3498db; color: #fff; padding: 10px; border-radius: 5px;">
+                    Detected Face
+                    </h2>
+                    <div style="max-width: 400px; margin: 0 auto; display:flex; gap: 10px;">
+                        ${imagesHTML}
+                        </div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    
+</body>
+</html>

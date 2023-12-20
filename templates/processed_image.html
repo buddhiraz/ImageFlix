@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processed Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        img {
+            max-width: 80%;
+            height: auto;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .detections {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Processed Image</h1>
+    <!-- <img src="{{ processed_image }}" alt="Processed Image"> -->
+    
+    <div class="detections">
+        <h2>Detections</h2>
+        <pre>{{ detections }}</pre>
+    </div>
+</body>
+</html>

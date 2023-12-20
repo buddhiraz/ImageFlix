@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera App</title>
+    <style>
+        #videoElement {
+            width: 400px;
+            height: 300px;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Camera App</h1>
+    <video autoplay="true" id="videoElement"></video>
+    <button onclick="takeSnapshot()">Click and Search</button>
+
+    <script>
+        function startVideo() {
+            const video = document.getElementById('videoElement');
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                })
+                .catch(function (err) {
+                    console.log("An error occurred: " + err);
+                });
+        }
+
+
+
+        function takeSnapshot() {
+            const video = document.getElementById('videoElement');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const data = canvas.toDataURL('image/jpeg'); // Convert to JPEG format
+
+            // Sending the image data to the Flask backend using AJAX
+            fetch('/get_photo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ photo: data }),
+            })
+                // .then(response => response.json())
+                // .then(data => {
+                //     // Handle the response if needed
+                //     console.log(data);
+                // })
+                // .catch(error => {
+                //     console.error('Error:', error);
+                // });
+        }
+
+
+
+
+        // Start the video when the page loads
+        document.addEventListener('DOMContentLoaded', startVideo);
+    </script>
+</body>
+
+</html>

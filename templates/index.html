@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Image</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60%;
+            margin-top: 50px;
+        }
+        .content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+        }
+        .upload-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .upload-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+        .upload-btn:hover {
+            background-color: #2980b9;
+        }
+        .processing {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .links a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #3498db;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Welcome to ImageFlix</h1>
+            <form action="/process_image" method="POST" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="file" accept="image/*"><br><br>
+                <button type="submit" class="upload-btn">Upload & Process</button>
+            </form>
+            <div class="processing"></div>
+            <div class="links">
+                <a href="{{ url_for('show_csv') }}">Show CSV</a>
+                <a href="{{ url_for('image_search') }}">Image Search</a>
+                <!-- Add more links for other endpoints as needed -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
