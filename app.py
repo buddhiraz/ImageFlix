@@ -41,66 +41,6 @@ os.makedirs(TEMP_STORAGE_PATH, exist_ok=True)
 
 
 
-@app.route('/get_photo', methods=['POST'])
-def process_clicked():
-    photo_data = request.json.get('photo')
-
-    # Save the photo data to a temporary file
-    filename = 'captured_photo.jpg'
-    photo_path = os.path.join(TEMP_STORAGE_PATH, filename)
-    with open(photo_path, 'wb') as file:
-        file.write(base64.b64decode(photo_data.split(',')[1]))
-
-    # Pass the photo path to the process_single_face() function
-    print(photo_path)
-    detections_json = process_clicked_image(file_path=photo_path)
-    # result = process_single_face(photo_path)  # Call the function with the photo path
-    print(detections_json)
-
-    return render_template('search_result.html',  detections=detections_json)
-def process_clicked_image(file_path):
-
-        detections = embedder.extract(file_path, threshold=0.95)
-
-        if len(detections) >=1:
-            print('Length pf Detection : ' , len(detections))
-            x = find_similar_faces(detections[0]['embedding'])
-
-        
-            num_faces = len(detections)
-            impr_features = ['box', 'confidence']  # Keys to be selected
-
-            filtered_list = [{key: value for key, value in d.items() if key in impr_features} for d in detections]
-            detections_json = {
-                    'num_faces' : num_faces,
-                    'detections': filtered_list,
-                    'top 5 images' : x['selected_images'] ,
-                }
-
-            # Extract detections from JSON data
-            detections = detections_json.get('detections', [])
-        else:
-            detections_json = {}
-
-        # Create a folder to temporarily store cropped faces
-        temp_folder = os.path.join(app.config['TEMP_FOLDER'], str(uuid.uuid4()))
-        os.makedirs(temp_folder)
-
-        # Crop faces from the image using provided coordinates and save them temporarily
-        cropped_faces_paths = []
-        image = cv2.imread(file_path)
-        for i, detection in enumerate(detections):
-            box = detection.get('box', [])
-            if len(box) == 4:  # Check if the box has four coordinates (x, y, w, h)
-                startX, startY, w, h = box
-                endX, endY = startX + w, startY + h
-                face = image[startY:endY, startX:endX].copy()
-                face_path = os.path.join(temp_folder, f"clicked_face_{i + 1}.jpg")
-                cv2.imwrite(face_path, face)
-                cropped_faces_paths.append(face_path)
-
-        # Return paths of the cropped faces to the frontend
-        return json.dumps(detections_json)
 
 def detect_faces(image_path, detections):
     image = cv2.imread(image_path)
