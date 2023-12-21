@@ -15,6 +15,12 @@
     ],
     "env": {
       "FLASK_ENV": "production"
-    }
+    },
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/"
+      }
+    ]
   }
   
